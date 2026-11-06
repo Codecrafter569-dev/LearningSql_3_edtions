@@ -1,0 +1,787 @@
+This is going to be a very long and complete guide. Let me cover everything topic by topic, sub-topic by sub-topic — **meaning, how it works, 5 examples, 5 practice problems.** No code, pure understanding.
+
+---
+
+# TOPIC 1 — 🏗️ Creating & Managing Tables
+
+---
+
+## 📌 CREATE TABLE
+
+**Meaning:** This is how you build a new table in your database. A table is like a spreadsheet — it has columns (fields) and rows (records).
+
+**How it works:** You give the table a name, then define each column with a name and a data type. PostgreSQL creates an empty table ready to store data.
+
+**5 Examples:**
+1. Create a table called `students` with columns for name, age, and grade
+2. Create a table called `products` with columns for product name, price, and stock quantity
+3. Create a table called `employees` with columns for employee ID, full name, and department
+4. Create a table called `books` with columns for title, author, and year published
+5. Create a table called `orders` with columns for order ID, customer name, and order date
+
+**5 Practice Problems:**
+1. Create a table called `countries` that stores country name, population, and continent
+2. Create a table called `movies` that stores movie title, director, and release year
+3. Create a table called `hospitals` that stores hospital name, city, and number of beds
+4. Create a table called `courses` that stores course name, instructor, and duration in hours
+5. Create a table called `vehicles` that stores vehicle brand, model, and year of manufacture
+
+---
+
+## 📌 DROP TABLE
+
+**Meaning:** This permanently deletes a table and all its data from the database. It is irreversible — once dropped, it is gone.
+
+**How it works:** You write the command with the table name. PostgreSQL removes the table structure and every single row of data inside it instantly.
+
+**5 Examples:**
+1. Drop a table called `old_customers` that is no longer needed
+2. Drop a table called `temp_data` that was used for testing
+3. Drop a table called `archived_orders` after moving data elsewhere
+4. Drop a table called `backup_employees` after confirming the real table is correct
+5. Drop a table called `test_products` created during practice
+
+**5 Practice Problems:**
+1. You created a table called `dummy_users` for testing — drop it
+2. A table called `expired_sessions` is outdated — drop it
+3. You have a table called `draft_reports` that is no longer valid — drop it
+4. A table called `old_inventory` was replaced by a new one — drop it
+5. You want to clean up a table called `sample_data` after finishing a demo — drop it
+
+---
+
+## 📌 ALTER TABLE
+
+**Meaning:** This lets you modify an existing table without deleting and recreating it. You can add new columns, remove columns, rename them, or change their type.
+
+**How it works:** You specify the table name and then say what change you want — add a column, drop a column, rename a column, or rename the table itself. PostgreSQL applies the change to the live table.
+
+**5 Examples:**
+1. Add a column `email` to an existing `students` table
+2. Remove the column `fax_number` from a `companies` table because fax is obsolete
+3. Rename the column `fname` to `first_name` in an `employees` table
+4. Rename the entire table `old_products` to `products`
+5. Add a column `created_at` (date) to a `users` table
+
+**5 Practice Problems:**
+1. You have a `books` table but forgot to add a `genre` column — add it
+2. Your `employees` table has a column called `dept` — rename it to `department`
+3. Your `orders` table has a column `notes` that nobody uses — remove it
+4. Rename your table `data` to something more descriptive like `sales_records`
+5. Your `movies` table is missing a `rating` column — add it
+
+---
+
+## 📌 Data Types
+
+**Meaning:** Every column in a table must have a data type. A data type tells PostgreSQL what kind of value that column is allowed to store — numbers, text, dates, true/false, etc.
+
+**How it works:** When you create a column, you pick the right type. PostgreSQL enforces it — you cannot store text in an integer column, for example.
+
+**5 Examples:**
+1. A `price` column should be `NUMERIC` or `DECIMAL` to store money values like 19.99
+2. A `student_name` column should be `TEXT` or `VARCHAR` to store names like "Alice"
+3. An `is_active` column should be `BOOLEAN` to store TRUE or FALSE
+4. A `birth_date` column should be `DATE` to store values like 2000-05-15
+5. An `employee_id` column should be `INTEGER` to store whole numbers like 1, 2, 3
+
+**5 Practice Problems:**
+1. What data type would you use for a column that stores a person's phone number?
+2. What data type fits a column storing the temperature like 36.6?
+3. What data type would you use for a column that stores whether a user is verified or not?
+4. What data type fits a column storing the exact time an order was placed?
+5. What data type would you use for a column storing a short description of a product?
+
+---
+
+## 📌 NOT NULL and DEFAULT
+
+**Meaning:**
+- `NOT NULL` means a column must always have a value — it cannot be left empty
+- `DEFAULT` means if no value is given for a column, PostgreSQL automatically fills it with a preset value
+
+**How it works:**
+- `NOT NULL` — PostgreSQL rejects any insert that leaves this column empty
+- `DEFAULT` — PostgreSQL silently fills the column with the default value if you don't provide one
+
+**5 Examples:**
+1. A `username` column with `NOT NULL` — every user must have a username
+2. A `status` column with `DEFAULT 'active'` — new users are automatically active
+3. A `created_at` column with `DEFAULT CURRENT_TIMESTAMP` — automatically records when a row was inserted
+4. A `salary` column with `NOT NULL` — every employee must have a salary recorded
+5. A `country` column with `DEFAULT 'Unknown'` — if no country is provided, it stores 'Unknown'
+
+**5 Practice Problems:**
+1. You have a `products` table — which column should be `NOT NULL` and why?
+2. Design a `users` table where the `role` column defaults to `'viewer'`
+3. What should the default value of a `stock_quantity` column be when a product is first added?
+4. You have a column `is_deleted` in a `posts` table — what default value makes sense?
+5. A `registration_date` column should be filled automatically — what default would you use?
+
+---
+---
+
+# TOPIC 2 — ✏️ CRUD Operations
+
+---
+
+## 📌 INSERT INTO
+
+**Meaning:** This is how you add new rows of data into a table. CRUD stands for Create, Read, Update, Delete — INSERT is the "Create" part.
+
+**How it works:** You name the table, list the columns you want to fill, and then provide the values in the same order. PostgreSQL adds a new row with those values.
+
+**5 Examples:**
+1. Insert a new student named "Alice" aged 20 into the `students` table
+2. Insert a new product "Laptop" priced at 999.99 into the `products` table
+3. Insert a new employee "John" in the "Marketing" department into `employees`
+4. Insert two books at once into a `books` table (multi-row insert)
+5. Insert a new order with today's date into the `orders` table
+
+**5 Practice Problems:**
+1. Insert three different countries into your `countries` table
+2. Insert a new movie "Inception" into your `movies` table
+3. Insert a new course "Python Basics" with instructor "Sara" into `courses`
+4. Insert a vehicle "Toyota Corolla 2022" into your `vehicles` table
+5. Insert a hospital in Nairobi with 200 beds into your `hospitals` table
+
+---
+
+## 📌 SELECT
+
+**Meaning:** This is how you read and retrieve data from a table. It is the most used SQL command. SELECT is the "Read" in CRUD.
+
+**How it works:** You tell PostgreSQL which columns you want and from which table. It returns matching rows. Using `*` means "give me all columns."
+
+**5 Examples:**
+1. Select all columns from the `students` table
+2. Select only the `name` and `age` columns from `students`
+3. Select all products from `products` table
+4. Select the `title` and `author` from `books`
+5. Select `employee_id` and `department` from `employees`
+
+**5 Practice Problems:**
+1. Retrieve all data from your `countries` table
+2. Retrieve only the `name` and `population` columns from `countries`
+3. Retrieve all movies from your `movies` table
+4. Retrieve only the instructor names from your `courses` table
+5. Retrieve all vehicles showing only brand and model
+
+---
+
+## 📌 UPDATE
+
+**Meaning:** This changes existing data in a table. UPDATE is the "Update" in CRUD. Without a WHERE clause, it updates EVERY row — so always use WHERE.
+
+**How it works:** You specify the table, which column to change, and the new value. The WHERE clause targets only specific rows. Without WHERE, all rows get updated.
+
+**5 Examples:**
+1. Update Alice's age from 20 to 21 in the `students` table
+2. Update the price of "Laptop" from 999 to 899 in `products`
+3. Update John's department from "Marketing" to "Sales" in `employees`
+4. Update the stock quantity of a product that just got restocked
+5. Update the status of an order from "pending" to "delivered"
+
+**5 Practice Problems:**
+1. A country's population changed — update it in your `countries` table
+2. A movie's release year was entered wrong — fix it
+3. A course instructor changed — update the instructor name
+4. A vehicle's year of manufacture was wrong — correct it
+5. A hospital expanded and now has 350 beds instead of 200 — update it
+
+---
+
+## 📌 DELETE
+
+**Meaning:** This removes rows from a table. DELETE is the "Delete" in CRUD. Like UPDATE, always use WHERE — without it you delete ALL rows.
+
+**How it works:** You name the table and use WHERE to target which rows to delete. PostgreSQL removes those rows permanently (unless inside a transaction you can rollback).
+
+**5 Examples:**
+1. Delete a student named "Alice" from the `students` table
+2. Delete all products that are out of stock (quantity = 0)
+3. Delete an employee who resigned from `employees`
+4. Delete all orders older than a specific date
+5. Delete a book that was added by mistake
+
+**5 Practice Problems:**
+1. Delete a country that no longer exists in your `countries` table
+2. Delete a movie that was entered as a duplicate
+3. Delete a course that was cancelled
+4. Delete a vehicle that was removed from inventory
+5. Delete a hospital record that was added by mistake
+
+---
+
+## 📌 TRUNCATE TABLE
+
+**Meaning:** This removes ALL rows from a table instantly but keeps the table structure. It is faster than DELETE with no WHERE because it does not scan rows one by one.
+
+**How it works:** PostgreSQL empties the entire table in one operation. Unlike DELETE, it cannot be easily filtered — it always clears everything.
+
+**5 Examples:**
+1. Truncate the `test_data` table after finishing a test session
+2. Truncate the `sessions` table to clear all login sessions
+3. Truncate a `logs` table that has grown too large
+4. Truncate a `temp_orders` table used during a bulk import
+5. Truncate a `sample_students` table used for a demo
+
+**5 Practice Problems:**
+1. You want to clear all rows from `draft_products` but keep the table — use TRUNCATE
+2. Your `test_employees` table is full of dummy data — empty it
+3. A `staging_data` table was used for import testing — clear it
+4. You want to reset your `practice_orders` table completely — how?
+5. Clear all records from a `temp_countries` table you used for practice
+
+---
+---
+
+# TOPIC 3 — 🔍 Filtering & Sorting
+
+---
+
+## 📌 WHERE
+
+**Meaning:** WHERE is a filter. It tells PostgreSQL "only give me rows that match this condition." Without WHERE, SELECT returns everything.
+
+**How it works:** You attach a condition after WHERE. PostgreSQL checks every row — rows that satisfy the condition are returned, others are skipped.
+
+**5 Examples:**
+1. Get all students where age is 20
+2. Get all products where price is less than 500
+3. Get all employees where department is "HR"
+4. Get all orders where status is "pending"
+5. Get all books where year published is after 2000
+
+**5 Practice Problems:**
+1. Retrieve all countries where the population is greater than 10 million
+2. Find all movies released after 2010
+3. Get all courses where duration is more than 30 hours
+4. Find all vehicles where brand is "Toyota"
+5. Get all hospitals where the number of beds is less than 100
+
+---
+
+## 📌 AND, OR, NOT
+
+**Meaning:** These are logical operators that combine multiple conditions in a WHERE clause.
+- `AND` — both conditions must be true
+- `OR` — at least one condition must be true
+- `NOT` — reverses a condition (true becomes false, false becomes true)
+
+**How it works:** You chain conditions together. PostgreSQL evaluates all of them and returns only the rows that satisfy the combined logic.
+
+**5 Examples:**
+1. Get students who are aged 20 AND in grade "A"
+2. Get products where price is below 100 OR stock is zero
+3. Get employees who are NOT in the "IT" department
+4. Get orders that are "pending" AND placed today
+5. Get books where author is "Rowling" OR author is "Tolkien"
+
+**5 Practice Problems:**
+1. Find countries where population is over 5 million AND continent is "Africa"
+2. Find movies where director is "Nolan" OR release year is 2020
+3. Find courses that are NOT taught by instructor "John"
+4. Find vehicles that are "Toyota" AND manufactured after 2018
+5. Find hospitals where beds are more than 200 AND city is "Nairobi"
+
+---
+
+## 📌 LIKE / ILIKE
+
+**Meaning:**
+- `LIKE` — matches text patterns (case-sensitive)
+- `ILIKE` — matches text patterns (case-insensitive, PostgreSQL-specific)
+- `%` means "any number of characters"
+- `_` means "exactly one character"
+
+**How it works:** You use a pattern with wildcards. PostgreSQL checks each row's text value against the pattern and returns matching rows.
+
+**5 Examples:**
+1. Find all students whose name starts with "A" → `'A%'`
+2. Find all products whose name contains "phone" → `'%phone%'`
+3. Find all employees whose name ends with "son" → `'%son'`
+4. Find all books whose title has exactly 5 characters → `'_____'`
+5. Find all emails that contain "gmail" regardless of case using ILIKE
+
+**5 Practice Problems:**
+1. Find all countries whose name starts with "S"
+2. Find all movies whose title contains the word "War"
+3. Find all courses whose name ends with "Basics"
+4. Find all vehicles whose brand contains "an" (like Honda, Nissan)
+5. Find all hospitals whose city starts with "L" — use ILIKE (case-insensitive)
+
+---
+
+## 📌 IN and BETWEEN
+
+**Meaning:**
+- `IN` — checks if a value matches any value in a given list (shortcut for multiple OR conditions)
+- `BETWEEN` — checks if a value falls within a range (inclusive on both ends)
+
+**How it works:**
+- `IN (value1, value2, value3)` — PostgreSQL checks if the column value is one of those listed
+- `BETWEEN low AND high` — PostgreSQL checks if the value is between the two boundaries including them
+
+**5 Examples:**
+1. Get employees who are in departments "HR", "IT", or "Finance" using IN
+2. Get products whose price is BETWEEN 100 and 500
+3. Get students whose grade is IN ("A", "B")
+4. Get orders placed BETWEEN January 1 and March 31
+5. Get countries whose population is BETWEEN 1 million and 10 million
+
+**5 Practice Problems:**
+1. Find all vehicles manufactured BETWEEN 2015 and 2022
+2. Find all movies released in years IN (2018, 2019, 2020)
+3. Find all courses with duration BETWEEN 20 and 60 hours
+4. Find all hospitals with beds IN (100, 200, 300)
+5. Find all countries in IN ("Kenya", "Uganda", "Tanzania")
+
+---
+
+## 📌 ORDER BY, LIMIT, OFFSET
+
+**Meaning:**
+- `ORDER BY` — sorts the results by a column (ascending or descending)
+- `LIMIT` — restricts how many rows are returned
+- `OFFSET` — skips a number of rows before starting to return results (used for pagination)
+
+**How it works:** PostgreSQL first filters rows, then sorts them with ORDER BY, then cuts the result with LIMIT, then skips rows using OFFSET.
+
+**5 Examples:**
+1. Get all students sorted by age from youngest to oldest (ASC)
+2. Get the top 5 most expensive products (ORDER BY price DESC, LIMIT 5)
+3. Get books sorted by year published from newest to oldest
+4. Get the 2nd page of results — skip first 10 rows and get next 10 (OFFSET 10 LIMIT 10)
+5. Get the single oldest employee (ORDER BY birth_date ASC, LIMIT 1)
+
+**5 Practice Problems:**
+
+1. Get all countries sorted by population from largest to smallest
+2. Get the 3 most recently released movies
+3. Get courses sorted alphabetically by course name
+4. Get the 5 most expensive vehicles
+5. Implement simple pagination — get the second page of hospitals (10 per page)
+
+---
+
+## 📌 IS NULL / IS NOT NULL
+
+**Meaning:** NULL in PostgreSQL means "no value" or "unknown." You cannot use `= NULL` to find it — you must use `IS NULL` or `IS NOT NULL`.
+
+**How it works:** PostgreSQL checks each row's column. If the column has no value at all (NULL), `IS NULL` returns true. If it has any value, `IS NOT NULL` returns true.
+
+**5 Examples:**
+1. Find all employees who have no phone number recorded (phone IS NULL)
+2. Find all products that have no description written yet
+3. Find all students whose email address is missing
+4. Find all orders that have a delivery date recorded (IS NOT NULL)
+5. Find all books where the author is unknown (IS NULL)
+
+**5 Practice Problems:**
+1. Find all countries where the continent column is missing
+2. Find all movies where the director has been filled in (IS NOT NULL)
+3. Find all courses where no instructor has been assigned yet
+4. Find all vehicles where the model is NULL
+5. Find all hospitals where the city column is not empty (IS NOT NULL)
+
+---
+---
+
+# TOPIC 4 — 🔑 Constraints
+
+---
+
+## 📌 PRIMARY KEY
+
+**Meaning:** A PRIMARY KEY is a column (or group of columns) that uniquely identifies each row in a table. No two rows can have the same primary key value, and it can never be NULL.
+
+**How it works:** When you mark a column as PRIMARY KEY, PostgreSQL automatically enforces that every value in that column is unique and never empty. It also creates an index on it automatically.
+
+**5 Examples:**
+1. `student_id` column as PRIMARY KEY in a `students` table
+2. `product_id` as PRIMARY KEY in a `products` table
+3. `order_id` as PRIMARY KEY in an `orders` table
+4. `employee_id` as PRIMARY KEY in an `employees` table
+5. `book_isbn` as PRIMARY KEY in a `books` table (ISBN is unique per book)
+
+**5 Practice Problems:**
+1. What column would you choose as the PRIMARY KEY in a `hospitals` table?
+2. Design a `vehicles` table — which column should be the primary key?
+3. Why can't `name` be a good PRIMARY KEY in a `students` table?
+4. Create a `movies` table and choose an appropriate PRIMARY KEY
+5. If a `courses` table has both `course_id` and `course_name` — which is a better PRIMARY KEY and why?
+
+---
+
+## 📌 FOREIGN KEY
+
+**Meaning:** A FOREIGN KEY is a column in one table that refers to the PRIMARY KEY of another table. It creates a relationship between two tables and enforces referential integrity — you cannot reference a row that doesn't exist.
+
+**How it works:** When you insert a row with a foreign key value, PostgreSQL checks that the value exists in the referenced table. If it doesn't exist, the insert is rejected.
+
+**5 Examples:**
+1. `student_id` in an `enrollments` table references `student_id` in `students`
+2. `department_id` in `employees` references `department_id` in `departments`
+3. `product_id` in `order_items` references `product_id` in `products`
+4. `author_id` in `books` references `author_id` in `authors`
+5. `hospital_id` in `doctors` references `hospital_id` in `hospitals`
+
+**5 Practice Problems:**
+1. You have a `students` table and a `grades` table — which column connects them?
+2. Design an `orders` table that references a `customers` table
+3. What happens if you try to insert a `department_id` in `employees` that doesn't exist in `departments`?
+4. Create a `books` table where each book belongs to a `category` — how do you link them?
+5. You delete a country from `countries` but `cities` table references it — what problem occurs?
+
+---
+
+## 📌 UNIQUE
+
+**Meaning:** The UNIQUE constraint ensures that all values in a column are different from each other. Unlike PRIMARY KEY, a UNIQUE column can contain NULL values.
+
+**How it works:** PostgreSQL checks every insert and update to make sure no duplicate values are entered in that column. If a duplicate is found, the operation is rejected.
+
+**5 Examples:**
+1. `email` column in a `users` table — no two users can share the same email
+2. `phone_number` in `employees` — each employee has a unique phone
+3. `license_plate` in a `vehicles` table
+4. `isbn` in a `books` table
+5. `username` in a `users` table — no duplicate usernames allowed
+
+**5 Practice Problems:**
+1. In a `students` table, which column besides the primary key should be UNIQUE?
+2. Why would you put UNIQUE on a `national_id` column?
+3. Can a UNIQUE column have NULL? Think about what that means
+4. In a `courses` table, should `course_name` be UNIQUE? Why or why not?
+5. In a `hospitals` table, what column besides the ID might deserve UNIQUE?
+
+---
+
+## 📌 CHECK
+
+**Meaning:** A CHECK constraint lets you define a custom rule that every value in a column must obey. If a value breaks the rule, the insert or update is rejected.
+
+**How it works:** You write a condition. PostgreSQL evaluates it for every row insert or update. Only values that pass the condition are accepted.
+
+**5 Examples:**
+1. `age` column must be greater than 0 — `CHECK (age > 0)`
+2. `price` must not be negative — `CHECK (price >= 0)`
+3. `rating` must be between 1 and 5 — `CHECK (rating BETWEEN 1 AND 5)`
+4. `status` must be only "active" or "inactive" — `CHECK (status IN ('active', 'inactive'))`
+5. `stock_quantity` must not go below zero — `CHECK (stock_quantity >= 0)`
+
+**5 Practice Problems:**
+1. Add a CHECK to a `students` table so that grade can only be "A", "B", "C", "D", or "F"
+2. Add a CHECK to a `hospitals` table so beds cannot be a negative number
+3. Add a CHECK to a `vehicles` table so the year cannot be before 1886 (first car ever made)
+4. Add a CHECK to a `courses` table so duration in hours must be at least 1
+5. Add a CHECK to a `movies` table so the release year cannot be in the future
+
+---
+
+## 📌 NOT NULL as a Constraint
+
+**Meaning:** NOT NULL means a column must always have a value — you are not allowed to leave it blank. Every important column that logically must have a value should be NOT NULL.
+
+**How it works:** PostgreSQL rejects any INSERT or UPDATE that tries to leave this column empty. It forces the person inserting data to always provide a value.
+
+**5 Examples:**
+1. `student_name` should be NOT NULL — a student without a name makes no sense
+2. `price` in products should be NOT NULL — a product must have a price
+3. `email` in users should be NOT NULL — an account must have an email
+4. `order_date` should be NOT NULL — every order must have a date
+5. `hospital_name` should be NOT NULL — a hospital without a name is meaningless
+
+**5 Practice Problems:**
+1. In a `countries` table, which columns should absolutely be NOT NULL?
+2. In a `books` table, can the `author` column be nullable? Why or why not?
+3. In an `employees` table, should `salary` be NOT NULL? Defend your answer
+4. In a `vehicles` table, should `year` be NOT NULL? What is the risk if it is nullable?
+5. Design a `movies` table and decide which columns must be NOT NULL
+
+---
+---
+
+# TOPIC 5 — 🔗 Joins
+
+---
+
+## 📌 INNER JOIN
+
+**Meaning:** Returns only the rows that have a matching value in BOTH tables. If a row in Table A has no match in Table B, it is excluded. If a row in Table B has no match in Table A, it is also excluded.
+
+**How it works:** PostgreSQL looks at the join condition (usually a foreign key = primary key), finds matching pairs from both tables, and returns combined rows.
+
+**5 Examples:**
+1. Join `students` and `grades` — only students who have grades are returned
+2. Join `employees` and `departments` — only employees assigned to a department appear
+3. Join `orders` and `customers` — only orders that have a customer record appear
+4. Join `books` and `authors` — only books that have a linked author appear
+5. Join `products` and `categories` — only products that belong to a category appear
+
+**5 Practice Problems:**
+1. Join `students` and `enrollments` — retrieve only students who are enrolled in at least one course
+2. Join `doctors` and `hospitals` — get only doctors who are assigned to a hospital
+3. Join `vehicles` and `owners` — get only vehicles that have an owner
+4. Join `movies` and `directors` — get only movies that have a director linked
+5. Join `countries` and `capitals` — get only countries that have a capital city recorded
+
+---
+
+## 📌 LEFT JOIN
+
+**Meaning:** Returns ALL rows from the LEFT table, and matching rows from the RIGHT table. If there is no match in the right table, the right side columns show NULL. No rows from the left are excluded.
+
+**How it works:** PostgreSQL goes through every row in the left table. For each row, it looks for a match in the right table. If found, it combines them. If not found, it still keeps the left row but fills right side with NULL.
+
+**5 Examples:**
+1. Left join `students` with `grades` — all students appear, even those with no grades yet (grades columns show NULL)
+2. Left join `employees` with `departments` — all employees appear even if unassigned to a department
+3. Left join `customers` with `orders` — all customers appear even those who never ordered
+4. Left join `authors` with `books` — all authors appear even those who haven't written a book yet
+5. Left join `countries` with `capitals` — all countries appear even those with no capital recorded
+
+**5 Practice Problems:**
+1. Get all students even those with no enrollment record — left join `students` with `enrollments`
+2. Get all hospitals even those with no doctors assigned — left join `hospitals` with `doctors`
+3. Get all courses even those with no students signed up — left join `courses` with `enrollments`
+4. Get all vehicles even those with no owner — left join `vehicles` with `owners`
+5. Get all movies even those with no reviews — left join `movies` with `reviews`
+
+---
+
+## 📌 RIGHT JOIN
+
+**Meaning:** The opposite of LEFT JOIN. Returns ALL rows from the RIGHT table and matching rows from the LEFT table. If a right table row has no match in the left, the left columns show NULL.
+
+**How it works:** Same as LEFT JOIN but flipped. Every row in the right table is guaranteed to appear. Left side fills with NULL when there is no match.
+
+**5 Examples:**
+1. Right join `enrollments` with `courses` — all courses appear even with no enrolled students
+2. Right join `employees` with `departments` — all departments appear even empty ones
+3. Right join `orders` with `products` — all products appear even those never ordered
+4. Right join `grades` with `students` — all students appear even those without grades
+5. Right join `doctors` with `hospitals` — all hospitals appear even those without doctors
+
+**5 Practice Problems:**
+1. Right join `enrollments` with `students` — get all students even those with no enrollments
+2. Right join `books` with `authors` — get all authors even those with no books
+3. Right join `vehicles` with `owners` — get all owners even those without a vehicle
+4. Right join `movies` with `directors` — get all directors even those without a movie
+5. Right join `orders` with `customers` — get all customers even those who have never ordered
+
+---
+---
+
+# TOPIC 6 — 📊 Aggregation
+
+---
+
+## 📌 COUNT, SUM, AVG, MIN, MAX
+
+**Meaning:** These are aggregate functions — they take a group of rows and compute a single result.
+- `COUNT` — how many rows
+- `SUM` — total of a numeric column
+- `AVG` — average of a numeric column
+- `MIN` — smallest value in a column
+- `MAX` — largest value in a column
+
+**How it works:** PostgreSQL scans all the rows (or a filtered subset) and applies the math, returning one result per group.
+
+**5 Examples:**
+1. COUNT all students in the `students` table
+2. SUM the total price of all orders
+3. AVG the price of all products
+4. MIN salary among all employees
+5. MAX number of beds among all hospitals
+
+**5 Practice Problems:**
+1. Count how many movies are in your `movies` table
+2. Find the average duration of all courses
+3. Find the highest population among all countries
+4. Find the total number of beds across all hospitals
+5. Find the minimum year of manufacture in your `vehicles` table
+
+---
+
+## 📌 GROUP BY
+
+**Meaning:** GROUP BY groups rows that share the same value in a column, then applies an aggregate function to each group. Instead of one result for the whole table, you get one result per group.
+
+**How it works:** PostgreSQL collects all rows with the same value, groups them together, then runs the aggregate (COUNT, SUM, etc.) on each group separately.
+
+**5 Examples:**
+1. Count the number of students per grade (GROUP BY grade)
+2. Sum total sales per department (GROUP BY department)
+3. Count number of movies per director (GROUP BY director)
+4. Average salary per department (GROUP BY department)
+5. Count number of hospitals per city (GROUP BY city)
+
+**5 Practice Problems:**
+1. Count how many vehicles exist per brand
+2. Find the average course duration per instructor
+3. Count how many countries are on each continent
+4. Find the total population per continent (group countries by continent, sum population)
+5. Count how many movies were released per year
+
+---
+
+## 📌 HAVING
+
+**Meaning:** HAVING is like WHERE but for groups. After GROUP BY creates groups, HAVING filters which groups to keep or discard. You cannot use WHERE to filter aggregated results — you must use HAVING.
+
+**How it works:** PostgreSQL first groups the rows, then applies the aggregate function, then HAVING checks each group's result and keeps only groups that pass the condition.
+
+**5 Examples:**
+1. Show only departments that have MORE than 10 employees (GROUP BY + HAVING COUNT > 10)
+2. Show only cities that have more than 3 hospitals
+3. Show only directors who have made more than 2 movies
+4. Show only countries where average city population is above 1 million
+5. Show only product categories where total stock is above 500
+
+**5 Practice Problems:**
+1. Group vehicles by brand — show only brands with more than 5 vehicles
+2. Group courses by instructor — show only instructors teaching more than 3 courses
+3. Group movies by release year — show only years that have more than 10 movies
+4. Group hospitals by city — show only cities with more than 2 hospitals
+5. Group countries by continent — show only continents with more than 10 countries
+
+---
+---
+
+# TOPIC 7 — 🔒 Transactions
+
+---
+
+## 📌 BEGIN, COMMIT, ROLLBACK
+
+**Meaning:**
+- `BEGIN` — starts a transaction (a safe block where changes are not permanent yet)
+- `COMMIT` — saves all changes made inside the transaction permanently
+- `ROLLBACK` — cancels all changes made since BEGIN, going back to the original state
+
+**How it works:** Without a transaction, every SQL statement is immediately permanent. With BEGIN, you enter a "sandbox" — changes are visible to you but not saved. COMMIT makes them real. ROLLBACK throws them away.
+
+**5 Examples:**
+1. BEGIN, transfer money from Account A to Account B, COMMIT — both steps succeed together
+2. BEGIN, insert a new order and its items, COMMIT — everything saved together
+3. BEGIN, delete some records by mistake, ROLLBACK — undo the deletion
+4. BEGIN, update prices, realize the values are wrong, ROLLBACK
+5. BEGIN, insert a student and their grades together, COMMIT — both saved atomically
+
+**5 Practice Problems:**
+1. Start a transaction, insert a country, then roll it back — explain what happens to the data
+2. Start a transaction, update a movie's director, commit it — what is the final state?
+3. Start a transaction, delete 5 students, then rollback — what is the final state?
+4. Why is it dangerous to do a bank transfer WITHOUT a transaction?
+5. Start a transaction, insert 3 courses, then commit — verify all 3 were saved
+
+---
+---
+
+# TOPIC 8 — 👤 Roles & Privileges
+
+---
+
+## 📌 CREATE ROLE
+
+**Meaning:** In PostgreSQL, users and groups are both called "roles." A role can log in, own objects, and be granted permissions. You create them with CREATE ROLE.
+
+**How it works:** You create a role by giving it a name and optional attributes like LOGIN (can connect to the database), PASSWORD, SUPERUSER, etc.
+
+**5 Examples:**
+1. Create a role `readonly_user` that can only read data
+2. Create a role `admin_user` with full permissions
+3. Create a role `app_user` that is used by your application to connect
+4. Create a role `analyst` who can only SELECT on specific tables
+5. Create a role `data_entry` who can INSERT and UPDATE but not DELETE
+
+**5 Practice Problems:**
+1. Create a role called `student` with login capability
+2. Create a role called `teacher` — what privileges would make sense?
+3. Create a role called `report_viewer` who should only read data
+4. Create a role called `db_manager` with elevated permissions
+5. What is the difference between a role with LOGIN and one without?
+
+---
+
+## 📌 GRANT and REVOKE
+
+**Meaning:**
+- `GRANT` — gives a role permission to perform specific actions (SELECT, INSERT, UPDATE, DELETE, ALL)
+- `REVOKE` — takes those permissions away
+
+**How it works:** You specify what privilege, on which object (table, schema, database), and to which role. PostgreSQL enforces these permissions every time that role tries to act.
+
+**5 Examples:**
+1. GRANT SELECT on `students` to role `readonly_user`
+2. GRANT INSERT, UPDATE on `products` to role `data_entry`
+3. GRANT ALL PRIVILEGES on `orders` to role `admin_user`
+4. REVOKE DELETE on `employees` from role `app_user`
+5. GRANT SELECT on ALL TABLES in a schema to role `analyst`
+
+**5 Practice Problems:**
+1. Grant the `student` role permission to only read from the `courses` table
+2. Grant the `teacher` role permission to insert and update in `grades`
+3. Revoke INSERT privilege from `report_viewer` on all tables
+4. Grant ALL privileges on the `hospitals` table to `db_manager`
+5. What happens if a role tries to DELETE without having DELETE privilege?
+
+---
+---
+
+# TOPIC 9 — 📇 Indexes
+
+---
+
+## 📌 CREATE INDEX
+
+**Meaning:** An index is a data structure that makes searching faster. Without an index, PostgreSQL reads every row (full table scan). With an index, it jumps directly to the right rows.
+
+**How it works:** PostgreSQL builds a sorted structure (B-tree by default) on a column. When you query that column, instead of scanning all rows, it uses the index to find rows quickly — like an index at the back of a book.
+
+**5 Examples:**
+1. Create an index on the `email` column of `users` — email lookups become fast
+2. Create an index on `last_name` in `employees` — name searches speed up
+3. Create an index on `order_date` in `orders` — date range queries get faster
+4. Create an index on `product_id` in `order_items` — join queries improve
+5. Create an index on `country_name` in `countries` — country lookups become faster
+
+**5 Practice Problems:**
+1. Which column in your `movies` table would benefit most from an index?
+2. Why does PRIMARY KEY automatically have an index?
+3. Create an index on `hospital_city` — what queries does this help?
+4. Is it good to index every column? What is the downside of too many indexes?
+5. Which column in `vehicles` would you index for fastest searching?
+
+---
+---
+
+# TOPIC 10 — 🗃️ Views
+
+---
+
+## 📌 CREATE VIEW
+
+**Meaning:** A view is a saved SELECT query that behaves like a virtual table. You can query it just like a real table, but it has no data of its own — it pulls data from the underlying real tables each time you query it.
+
+**How it works:** You define the view with a SELECT statement. PostgreSQL saves the query definition. Every time you SELECT from the view, PostgreSQL runs that saved query and returns the result.
+
+**5 Examples:**
+1. Create a view `active_students` that shows only students with status "active"
+2. Create a view `expensive_products` that shows products where price > 1000
+3. Create a view `employee_summary` that shows name, department, and salary together (joined from two tables)
+4. Create a view `recent_orders` that shows only orders placed in the last 30 days
+5. Create a view `hospital_doctors` that joins `hospitals` and `doctors` tables
+
+**5 Practice Problems:**
+1. Create a view that shows only movies released after 2015
+2. Create a view that shows the total number of students per course
+3. Create a view that shows only hospitals with more than 100 beds
+4. Create a view that joins `vehicles` and `owners` showing vehicle brand and owner name
+5. Create a view called `top_countries` showing only countries with population above 50 million
+
+---
+
+> ✅ That covers every topic, every sub-topic — meaning, how it works, 5 examples, and 5 practice problems. Start from **Topic 1 → CREATE TABLE** and work your way down. Whenever you are ready to practice, try the problems first, then ask me to verify your queries!

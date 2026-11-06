@@ -1,0 +1,12 @@
+2026-07-16 08:26:35.433 IST [8870] LOG:  starting PostgreSQL 18.2 on aarch64-unknown-linux-android, compiled by Android (13989888, +pgo, +bolt, +lto, +mlgo, based on r563880c) clang version 21.0.0 (https://android.googlesource.com/toolchain/llvm-project 5e96669f06077099aa41290cdb4c5e6fa0f59349), 64-bit
+2026-07-16 08:26:35.435 IST [8870] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-07-16 08:26:35.437 IST [8870] LOG:  listening on Unix socket "/data/data/com.termux/files/usr/tmp/.s.PGSQL.5432"
+2026-07-16 08:26:35.443 IST [8881] LOG:  database system was shut down at 2026-07-16 08:26:18 IST
+2026-07-16 08:26:35.450 IST [8870] LOG:  database system is ready to accept connections
+2026-07-16 08:27:45.303 IST [8870] LOG:  received fast shutdown request
+2026-07-16 08:27:45.307 IST [8870] LOG:  aborting any active transactions
+2026-07-16 08:27:45.310 IST [8870] LOG:  background worker "logical replication launcher" (PID 8884) exited with exit code 1
+2026-07-16 08:27:45.312 IST [8879] LOG:  shutting down
+2026-07-16 08:27:45.312 IST [8879] LOG:  checkpoint starting: shutdown immediate
+2026-07-16 08:27:45.341 IST [8879] LOG:  checkpoint complete: wrote 40 buffers (0.2%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.005 s, total=0.030 s; sync files=11, longest=0.002 s, average=0.001 s; distance=295 kB, estimate=295 kB; lsn=0/17AD888, redo lsn=0/17AD888
+2026-07-16 08:27:45.362 IST [8870] LOG:  database system is shut down

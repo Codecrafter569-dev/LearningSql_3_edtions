@@ -1,0 +1,92 @@
+Here are 20 problems built directly on your `students` table (plus one small extra table I'll introduce for the foreign-key problems). Each one explains the scenario so you know exactly what to write and how to check it worked.
+
+**Setup note for FK problems**: Before attempting problems 7 and 8, create this extra table — it tracks exam scores and references `students`:
+
+```sql
+CREATE TABLE marks (
+  student_id INT NOT NULL,
+  subject    VARCHAR(20) NOT NULL,
+  score      INT NOT NULL,
+  PRIMARY KEY (student_id, subject),
+  FOREIGN KEY (student_id) REFERENCES students(student_id)
+);
+```
+
+---
+
+**1. UPDATE — correcting a single field**
+Alok Kumar's `roll_no` was entered as `1`, but his actual roll number is `12`. Write the `UPDATE` statement to fix only Alok's row, then write a `SELECT` to confirm `roll_no = 12` now appears for him and no one else changed.
+
+**2. UPDATE — bulk update with a condition**
+The school decided that all students in class `'XI'` (the general stream, not ARTS or SCIE) should be marked as `age = 17` because of a re-evaluation of the academic year cutoff. Write an `UPDATE` that changes only Vikash's row (the one with `class = 'XI'`), and explain what would happen if you forgot the `WHERE` clause.
+
+**3. DELETE — removing a single student**
+Anmol Kumar has transferred to another school. Write the `DELETE` statement to remove only his row from `students`, then run `SELECT * FROM students;` to confirm only 2 rows remain.
+
+**4. DELETE — understanding FK protection**
+First insert two rows into `marks` for Anmol (`student_id` = whatever his ID is, subjects `'Math'` and `'Physics'`, any scores). Now try to run `DELETE FROM students WHERE first_name = 'Anmol';` *before* deleting his marks. Copy the exact error message Postgres gives, then write the correct two-step sequence (delete from `marks` first, then `students`) that succeeds.
+
+**5. Primary Key — diagnosing a duplicate insert**
+A new student record needs to be added, but a careless script tries:
+```sql
+INSERT INTO students(student_id, first_name, last_name, eye_color, age, class, roll_no)
+VALUES (1, 'Rohit', 'Sharma', 'BL', 17, 'XII', 5);
+```
+Run this (assuming `student_id = 1` already exists from Vikash's row), copy the exact error message, and explain why Postgres rejects it even though the names and other details are completely different.
+
+**6. Primary Key — avoiding duplicate marks with ON CONFLICT**
+You're importing a batch of marks and aren't sure which ones already exist. Write an `INSERT ... ON CONFLICT DO NOTHING` statement that tries to insert `(student_id=1, subject='Math', score=85)` twice in the same statement (as two rows in the `VALUES` list). Then `SELECT * FROM marks WHERE student_id = 1;` to confirm only one row for Math exists.
+
+**7. Foreign Key — triggering the error**
+Without inserting any extra student rows, attempt:
+```sql
+INSERT INTO marks (student_id, subject, score) VALUES (999, 'Chemistry', 70);
+```
+Copy the full error message, and identify which words in the `DETAIL` line tell you that `student_id = 999` doesn't exist in `students`.
+
+**8. Foreign Key — correct insert order**
+A new student, "Priya Singh" (`eye_color = 'BR'`, `age = 16`, `class = 'XI(SCIE)'`, `roll_no = 24`), needs a Chemistry score of `78` recorded. Write the two `INSERT` statements (first into `students`, then into `marks`) in the order that avoids a foreign key error, then write a `JOIN` query that shows Priya's `first_name`, `subject`, and `score` together.
+
+**9. CHECK constraint — invalid eye color**
+A new admission form lists a student's eye color as `'Hazel'`. Write the `INSERT` statement that would attempt to add this student (any name/age/class/roll_no you like) with `eye_color = 'Hazel'`, run it, copy the resulting error message, and state which constraint name Postgres reports in the `DETAIL` line.
+
+**10. CHECK constraint — adding an age rule**
+The school only enrolls students aged between 14 and 20 (inclusive). Write an `ALTER TABLE` statement that adds a `CHECK` constraint enforcing `age BETWEEN 14 AND 20` on the `students` table. Then write an `INSERT` with `age = 25` to show the constraint rejecting it, and copy the error message.
+
+**11. Date conversion — adding a date column and fixing bad input**
+The school now wants to track each student's `date_of_birth`. First run:
+```sql
+ALTER TABLE students ADD COLUMN date_of_birth DATE;
+```
+An admin then receives Vikash's birth date written as `'15-08-2009'` (day-month-year format). Write an `UPDATE` using `to_date()` with the correct format mask to set Vikash's `date_of_birth` from this string, then `SELECT` to confirm the stored value is `2009-08-15`.
+
+**12. Date conversion — formatted reporting**
+For a printed ID card, the school wants each student's birthday displayed like `"Born on Saturday, 15 August 2009"`. After completing problem 11 for all three students (use any reasonable birth dates for Alok and Anmol), write a `SELECT` using `to_char()` and the `||` concatenation operator to produce this exact phrasing for each row.
+
+**13. DROP TABLE — dependency ordering**
+Explain in one or two sentences why running `DROP TABLE students;` before `DROP TABLE marks;` fails (assuming both tables and the FK from problem 8's setup exist). Then write the two `DROP TABLE` statements in the order that succeeds, and as an alternative, write a single statement using `CASCADE` that drops `students` and automatically removes the dependent foreign key constraint.
+
+**14. Describing a table — without `\d`**
+A classmate using a GUI tool (not psql) wants to see the structure of the `students` table. Write a query against `information_schema.columns` that returns `column_name`, `data_type`, and `is_nullable` for the `students` table, ordered by the column's position (`ordinal_position`).
+
+**15. Query mechanics — empty result set**
+Write a query that searches `students` for `last_name = 'Verma'` (a name that doesn't exist in your data). Run it and write down exactly what psql prints, including the row-count line, and explain why this is *not* an error.
+
+**16. Query mechanics — single-row result**
+Insert a new student with `last_name = 'Verma'` (any other valid values). Re-run the same query as problem 15. Explain how the output changes and what the `(1 row)` line at the bottom means.
+
+**17. Multi-clause query — grouping by class**
+The principal wants to know which `class` values have **more than one** student enrolled, along with the count, sorted alphabetically by class name. Write one query using `GROUP BY`, `HAVING`, and `ORDER BY` together against `students` to answer this. Explain why you can't use `WHERE count(*) > 1` here and must use `HAVING` instead.
+
+**18. SELECT clause — mixing literals, math, and functions**
+Write a query against `students` that returns four columns for every row: `student_id`, a literal text column showing `'ENROLLED'`, a column showing `age * 12` (representing age in months), and a column showing `first_name` converted to uppercase using `upper()`.
+
+**19. Column aliases — before and after**
+Run the query from problem 18 *without* any aliases and write down the default column headers Postgres generates for the literal column, the `age * 12` expression, and the `upper(first_name)` call. Then rewrite the same query with meaningful `AS` aliases (e.g., `status`, `age_in_months`, `first_name_upper`) and compare the two outputs.
+
+**20. Server info — a diagnostics query**
+A teacher managing multiple school databases wants one query to confirm: which database they're currently connected to, which user they're logged in as, and the PostgreSQL version running. Write that single query using `current_database()`, `current_user`, and `version()`, and explain why running this first is good practice before making changes to a table like `students`.
+
+---
+
+Want detailed solutions (exact SQL + expected output) for any of these, or should I do a full walkthrough of all 20?

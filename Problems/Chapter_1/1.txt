@@ -1,0 +1,69 @@
+Here's a second set of 20 problems, this time with more context for each so it's clearer what you're being asked to do and how to verify your answer. These use the same `person`, `favorite_food`, `language`, and `customer` tables from before.
+
+**1. UPDATE — fixing a typo**
+A new employee accidentally entered Susan Smith's (`person_id = 2`) eye color as `'BR'` when it should be `'BL'`. Write the `UPDATE` statement to correct this, then write a `SELECT` to confirm the change took effect.
+
+**2. UPDATE — bulk correction with a condition**
+The company discovered that everyone whose `birth_date` is before `1980-01-01` was entered with `country = NULL` instead of `'USA'`. Write a single `UPDATE` that fixes all of these rows at once, and explain why a `WHERE` clause is essential here.
+
+**3. DELETE — removing a single preference**
+Person 1 (William Turner) no longer likes `'cookies'`. Write the `DELETE` statement that removes only this one row from `favorite_food` without affecting his other favorite foods, and verify with a `SELECT` that only the intended row is gone.
+
+**4. DELETE — understanding the FK block**
+Before deleting any rows, run a query to count how many rows in `favorite_food` reference `person_id = 1`. Then attempt `DELETE FROM person WHERE person_id = 1;` and write down the exact error message Postgres gives. Finally, write the correct two-step sequence to delete William entirely (favorite foods first, then the person row).
+
+**5. Primary Key — diagnosing a duplicate insert**
+A script tries to re-insert `person_id = 1` with different data (`'Charles', 'Fulton', 'GR', '1968-01-15'`). Run this insert, copy the exact error message, and explain in your own words why Postgres rejects it even though all the *other* column values are different.
+
+**6. Primary Key — safe re-insert with ON CONFLICT**
+You're importing a batch of favorite foods and some may already exist. Write an `INSERT ... ON CONFLICT DO NOTHING` statement that tries to add `(person_id=1, food='pizza')` (which already exists) plus `(person_id=1, food='sushi')` (which doesn't) in the same statement. Then run a `SELECT` on `favorite_food` for `person_id = 1` to confirm only the new row was added.
+
+**7. Foreign Key — triggering and reading the error**
+Without inserting any new person rows, attempt:
+```sql
+INSERT INTO favorite_food (person_id, food) VALUES (777, 'ramen');
+```
+Copy the full error message and identify which part of it tells you *which table* and *which column* caused the failure.
+
+**8. Foreign Key — the correct insert order**
+A new customer named "Tom Hardy" needs to be added to `person` (assign `person_id = 777`) along with his favorite food `'ramen'`. Write the two `INSERT` statements in the correct order so neither one errors, then verify with a `JOIN` query between `person` and `favorite_food` showing Tom's name and food together.
+
+**9. CHECK constraint — bad data from a form**
+A web form accidentally let a user submit `eye_color = 'Hazel'` for a new person (`person_id = 50`, name `'Nina'`, `'Patel'`). Write the `INSERT` that would be attempted, run it, copy the error message, and state which constraint name appears in the `DETAIL` line.
+
+**10. CHECK constraint — adding a new business rule**
+The company wants to ensure no one in the `person` table can have a `birth_date` in the future (after today). Write an `ALTER TABLE` statement that adds this `CHECK` constraint, then write an `INSERT` that would violate it (e.g., `birth_date = '2030-01-01'`) and show the resulting error.
+
+**11. Date conversion — fixing a badly formatted import**
+An imported CSV has dates written like `'27/05/1972'` (day/month/year). Write an `UPDATE` statement using `to_date()` with the correct format mask to set `person_id = 1`'s `birth_date` from this string, then `SELECT` to confirm the stored value is `1972-05-27`.
+
+**12. Date conversion — formatted reporting**
+For a printed report, management wants every person's birthday displayed as `"Born on a Wednesday, June 12, 1972"` style text (full weekday name, full month name, day, year). Write a `SELECT` using `to_char()` and string concatenation (`||`) to produce this exact phrasing for each row in `person`.
+
+**13. DROP TABLE — dependency ordering**
+Explain (in a sentence or two) why running `DROP TABLE person;` before `DROP TABLE favorite_food;` fails, then write the two `DROP TABLE` statements in the order that succeeds. As an alternative, write a single statement using `CASCADE` that drops `person` and automatically removes the dependent constraint.
+
+**14. Describing a table — without `\d`**
+A teammate is using a GUI tool that doesn't support psql's `\d` command. Write a portable SQL query against `information_schema.columns` that returns the `column_name`, `data_type`, and whether each column `is_nullable` for the `person` table, ordered by the column's position in the table.
+
+**15. Query mechanics — empty result set**
+Write a query against `customer` searching for `last_name = 'ZIEGLER'`. Run it and note exactly what psql prints (including the row count line) when no rows match — and explain why this is different from an error.
+
+**16. Query mechanics — single-row result**
+Insert a new customer `('Olivia', 'Ziegler')`. Now re-run the same query as problem 15. Explain how the output changes and what the `(1 row)` line tells you.
+
+**17. Multi-clause query — grouping and filtering**
+The marketing team wants to know which last names appear **more than once** among customers, listed alphabetically with their counts. Write one query using `GROUP BY`, `HAVING`, and `ORDER BY` together to answer this, and explain the difference between using `WHERE` versus `HAVING` in this query.
+
+**18. SELECT clause — mixing literals, math, and functions**
+Write a query against `language` that returns four columns for every row: the `language_id`, a literal text column showing `'CHECKED'`, a column showing `language_id` raised to the power of 2 (hint: use `^` or `power()`), and a column showing the language `name` converted to lowercase.
+
+**19. Column aliases — before and after**
+Run the query from problem 18 first *without* any column aliases and write down the default header names Postgres generates for the literal, the math expression, and the function call. Then rewrite the same query *with* meaningful `AS` aliases for all four columns and compare the two outputs.
+
+**20. Server info — building a diagnostics query**
+A junior developer wants a single query that a support team can run to quickly check three things at once: the PostgreSQL version string, which database they're currently connected to, and which user they're connected as. Write that one query, and explain why this kind of query is useful for troubleshooting a "wrong database" or "wrong user" connection issue.
+
+---
+
+Want me to walk through full solutions (with the exact SQL, expected output, and explanations) for any or all of these?

@@ -1,0 +1,170 @@
+# PostgreSQL — Plain English Practice Guide
+
+---
+-- 1. Add a new column called email to the student table
+ALTER TABLE student
+ADD COLUMN email VARCHAR(100);
+
+-- 2. Add a new column called phone_number to the employee table
+ALTER TABLE employee
+ADD COLUMN phone_number VARCHAR(15);
+
+-- 3. Rename the column city to location in the student table
+ALTER TABLE student
+RENAME COLUMN city TO location;
+
+-- 4. Change the data type of the salary column from integer to decimal
+ALTER TABLE employee
+ALTER COLUMN salary TYPE DECIMAL(10,2);
+
+-- 5. Remove the phone_number column from the customer table
+ALTER TABLE customer
+DROP COLUMN phone_number;
+
+
+
+## 1. CREATE TABLE
+
+1. Create a table named **student** that has columns for id, name, age, and city
+
+2. Create a table named **employee** that has columns for id, name, salary, and department
+
+3. Create a table named **book** that has columns for id, title, author, and price
+
+4. Create a table named **customer** that has columns for id, name, email, and phone number
+
+5. Create a table named **product** that has columns for id, product name, quantity, and price
+
+---
+
+## 2. INSERT
+
+1. Insert a student named **Ali**, who is **20 years old** and lives in **Karachi**
+
+2. Insert an employee named **Sara** who works in the **IT department** and earns a salary of **60000**
+
+3. Insert a book titled **Clean Code**, written by **Robert Martin**, priced at **35.99**
+
+4. Insert **three customers at the same time** named John, Maria, and Ahmed with their emails and phone numbers
+
+5. Insert a product named **Laptop** with a quantity of **50** and a price of **1200**
+
+---
+
+## 3. SELECT
+
+1. Get **all columns and all rows** from the student table
+
+2. Get only the **name and age** columns from the student table
+
+3. Get only the **name and salary** columns from the employee table
+
+4. Get only the **title and author** columns from the book table
+
+5. Get **all columns and all rows** from the customer table
+
+---
+
+## 4. WHERE
+
+1. Get all students whose **age is greater than 18**
+
+2. Get all employees who work in the **IT department**
+
+3. Get all books whose **price is less than 50**
+
+4. Get the customer whose **name is John**
+
+5. Get all products whose **quantity is greater than 100**
+
+---
+
+## 5. ORDER BY
+
+1. Get all students and sort them by **age from youngest to oldest**
+
+2. Get all employees and sort them by **salary from highest to lowest**
+
+3. Get all books and sort them by **price from cheapest to most expensive**
+
+4. Get all customers and sort their **names from A to Z**
+
+5. Get all products and sort them by **quantity from most to least**
+
+---
+
+## 6. LIMIT
+
+1. Get only the **first 3 students** from the student table
+
+2. Get only the **top 5 highest paid** employees
+
+3. Get only **1 book** from the book table
+
+4. Get only the **first 4 customers** from the customer table
+
+5. Get only the **2 most expensive products** from the product table
+
+---
+
+## 7. UPDATE
+
+1. Update the **city of Ali** to **Lahore** in the student table
+
+2. Update the **salary of Sara** to **80000** in the employee table
+
+3. Update the **price of the book Clean Code** to **29.99** in the book table
+
+4. Update the **phone number of John** to a new number in the customer table
+
+5. Update the **quantity of Laptop** to **100** in the product table
+
+---
+
+## 8. DELETE
+
+1. Delete the student whose **id is 5** from the student table
+
+2. Delete all employees who work in the **HR department**
+
+3. Delete the book whose **price is greater than 100**
+
+4. Delete the customer whose **name is Maria**
+
+5. Delete all products whose **quantity is 0** because they are out of stock
+
+---
+
+## 9. ALTER TABLE
+
+1. Add a new column called **email** to the student table
+
+2. Add a new column called **phone number** to the employee table
+
+3. Rename the column **city** to **location** in the student table
+
+4. Change the data type of the **salary column** from integer to decimal in the employee table
+
+5. Remove the column **phone number** completely from the customer table
+
+---
+
+## 10. TRUNCATE
+
+1. Delete **all rows from the student table** but keep the table structure
+
+2. Delete **all rows from the employee table** but keep the table structure
+
+3. Delete **all rows from the book table** but keep the table structure
+
+4. Delete **all rows from the customer table** and also **reset the ID counter back to 1**
+
+5. Delete **all rows from the product table** but keep the table structure
+
+---
+
+> 💡 **How to Practice:**
+> - First **read** the plain English instruction
+> - Then **try to write** the SQL code yourself without looking
+> - Then **check** your answer
+> - This is the best way to learn SQL fast! 🚀
